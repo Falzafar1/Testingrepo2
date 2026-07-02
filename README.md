@@ -1,18 +1,11 @@
 <div align="center">
 
-  <!-- Ganti LOGO.png dengan logo/banner proyek Anda -->
-  <img src="assets/banner.png" alt="Trash Vision Banner" width="100%"/>
-
-  <h1>🗑️ Trash Vision</h1>
+  <img src="assets/HeaderRepo.svg" alt="Trash Vision Banner" width="100%"/>
 
   <p>
-    <strong>Drone-Based Real-Time Waste Detection System for Environmental Monitoring</strong>
-  </p>
-
-  <p>
-    <a href="https://github.com/[username]/trash-vision/stargazers"><img src="https://img.shields.io/github/stars/[username]/trash-vision?style=flat-square&color=yellow" alt="Stars"/></a>
-    <a href="https://github.com/[username]/trash-vision/network/members"><img src="https://img.shields.io/github/forks/[username]/trash-vision?style=flat-square&color=blue" alt="Forks"/></a>
-    <a href="https://github.com/[username]/trash-vision/commits/main"><img src="https://img.shields.io/github/last-commit/[username]/trash-vision/main?style=flat-square" alt="Last Commit"/></a>
+    <a href="https://github.com/ROBOTICS-STEI-ITB/Trash_Vision_V1/stargazers"><img src="https://img.shields.io/github/stars/ROBOTICS-STEI-ITB/Trash_Vision_V1?style=flat-square&color=yellow" alt="Stars"/></a>
+    <a href="https://github.com/ROBOTICS-STEI-ITB/Trash_Vision_V1/network/members"><img src="https://img.shields.io/github/forks/ROBOTICS-STEI-ITB/Trash_Vision_V1?style=flat-square&color=blue" alt="Forks"/></a>
+    <a href="https://github.com/ROBOTICS-STEI-ITB/Trash_Vision_V1/commits/main"><img src="https://img.shields.io/github/last-commit/ROBOTICS-STEI-ITB/Trash_Vision_V1/main?style=flat-square" alt="Last Commit"/></a>
     <img src="https://img.shields.io/badge/License-MIT-green?style=flat-square" alt="License"/>
     <img src="https://img.shields.io/badge/Python-3.10+-blue?style=flat-square&logo=python&logoColor=white" alt="Python"/>
     <img src="https://img.shields.io/badge/YOLO-Object%20Detection-red?style=flat-square" alt="YOLO"/>
@@ -20,15 +13,11 @@
     <img src="https://img.shields.io/badge/Pixhawk%206X-Flight%20Controller-orange?style=flat-square" alt="Pixhawk"/>
   </p>
 
-  <p>
-    <a href="README.md"><strong>🇬🇧 English</strong></a> · <a href="README.id.md">🇮🇩 Bahasa Indonesia</a>
-  </p>
-
 </div>
 
 ---
 
-> **Trash Vision** adalah sistem pendeteksi sampah berbasis drone yang dirancang untuk pemantauan lingkungan secara otomatis dan real-time. Menggunakan arsitektur YOLO yang berjalan di atas Raspberry Pi 5 dengan akselerator AI onboard, sistem ini mampu mendeteksi, melokasikan, dan memetakan sebaran sampah dari udara — khususnya difokuskan untuk monitoring lingkungan perairan seperti Sungai Citarum.
+> **Trash Vision** adalah sistem pendeteksi sampah berbasis drone yang dirancang untuk mendeteksi sampah secara otomatis dan real-time. Sistem ini menggunakan model computer vision YOLOv8 yang berjalan di atas Raspberry Pi 5 dengan akselerator AI on-board, sistem ini mampu mengirimkan hasil deteksi berupa lokasi (Nama beserta koordinat GPS), timestamp, gambar teranotasi, serta hasil deteksi dan klasifikasi ke situs pengguna.
 
 ---
 
@@ -49,95 +38,72 @@
 
 ## 🌍 Tentang Proyek
 
-Penumpukan sampah di area terbuka dan perairan — khususnya sungai-sungai besar di Indonesia — merupakan masalah lingkungan yang membutuhkan solusi pemantauan yang **cepat, akurat, dan skalabel**. Inspeksi manual membutuhkan banyak sumber daya manusia, waktu, dan biaya, serta sering kali tidak mampu menjangkau area yang luas secara efisien.
+Berdasarkan data Direktorat Jenderal Pengendalian Pencemaran dan Kerusakan Lingkungan (Ditjen PPKL) dan KLHK, **59% sungai di Indonesia tercemar berat** oleh berbagai jenis sampah seperti botol plastik dan kaleng. Tim peneliti dari Institut Teknologi Bandung (ITB) melakukan sampling sampah menggunakan drone UAV di area-area terdampak.
 
-**Trash Vision** hadir sebagai solusi berbasis teknologi drone dan kecerdasan buatan yang dapat:
+Namun dalam praktiknya, drone yang ada di lab saat ini hanya berfungsi sebagai alat **perekam video mentah**. Seluruh analisis mulai dari pemindahan data, menonton video, hingga klasifikasi sampah masih dilakukan secara manual. Sebagai contoh, untuk video berdurasi **15 detik** saja, waktu analisis manual bisa mencapai **200 detik**. Alur kerja ini dinilai lambat dan tidak efisien.
 
-- 🔍 **Mendeteksi keberadaan sampah** dari ketinggian secara real-time
-- 📍 **Mencatat koordinat GPS** titik-titik sampah secara otomatis
-- 🗺️ **Memetakan persebaran sampah** dalam satu area misi
-- 📊 **Menghasilkan laporan** lengkap setiap akhir sesi penerbangan
-- ⚡ **Memproses inferensi secara onboard** tanpa bergantung koneksi internet
+**Trash Vision** hadir sebagai solusi dengan mengimplementasikan **edge device** yang melakukan komputasi computer vision secara **on-board** langsung di atas drone UAV, sehingga sistem mampu:
 
-> 💡 Proyek ini dikembangkan sebagai Tugas Akhir (Skripsi) dengan fokus integrasi subsistem visi komputer pada drone otonom untuk mendukung program monitoring lingkungan hidup.
+- 🔍 **Mendeteksi & mengklasifikasikan sampah** (botol plastik, kaleng, tumpukan daun) secara otomatis
+- ⚡ **Melakukan inferensi on-board** menggunakan Raspberry Pi 5 + AI HAT 26 TOPS (14.8ms)
+- 📷 **Melakukan anotasi gambar hasil deteksi** dengan bounding box beserta jenis sampahnya
+- 🔋 **Memiliki power supply independen** terpisah dari baterai drone agar tidak membebani durasi terbang
+- 📡 **Diakses melalui SSH** over Tailscale untuk kontrol sistem secara wireless
+- 📊 **Log data otomatis** berisi jenis & jumlah sampah, koordinat GPS, timestamp, nama lokasi, dan gambar teranotasi yang dikirim ke website pengguna
+
+> 💡 Proyek ini dikembangkan sebagai **Tugas Akhir** di Sekolah Teknik Elektro dan Informatika, **Institut Teknologi Bandung (ITB)**, dengan fokus implementasi sistem pendeteksi sampah pada edge device yang terpasang pada drone UAV.
+
+---
+
+## Informasi Terbaru
+
+- **2026-07-02**: **Repository sistem pendeteksi sampah V1** — pembuatan repository `Trash-Vision-V1` sebagai dokumentasi dari hasil tugas akhir kelompok TA25260127 beserta panduan setup dan juga instalasi sistem.
 
 ---
 
 ## 🏗️ Arsitektur Sistem
 
-```
-┌─────────────────────────────────────────────────────────────┐
-│                        TRASH VISION                         │
-│                   Drone-Based AI System                      │
-└─────────────────────────────────────────────────────────────┘
-          │
-          ▼
-┌─────────────────┐     ┌──────────────────┐
-│   DRONE FRAME   │     │  FLIGHT CONTROL  │
-│  Holybro X500V2 │────▶│  Pixhawk 6X      │
-└─────────────────┘     └──────────────────┘
-                                │
-                    ┌───────────▼───────────┐
-                    │   ONBOARD COMPUTER    │
-                    │   Raspberry Pi 5      │
-                    │   + AI Accelerator    │
-                    └───────────┬───────────┘
-                                │
-               ┌────────────────┼────────────────┐
-               ▼                ▼                ▼
-        ┌──────────┐    ┌──────────────┐  ┌──────────────┐
-        │  Camera  │    │  YOLO Model  │  │  GPS Module  │
-        │  Input   │───▶│  Detection   │  │  Telemetry   │
-        └──────────┘    └──────┬───────┘  └──────┬───────┘
-                               │                  │
-                               ▼                  ▼
-                        ┌─────────────────────────────┐
-                        │       BACKEND / API          │
-                        │  (Data Fusion & Reporting)   │
-                        └─────────────────────────────┘
-                                      │
-                                      ▼
-                        ┌─────────────────────────────┐
-                        │      OUTPUT / DASHBOARD      │
-                        │  • Peta Sebaran Sampah        │
-                        │  • Koordinat GPS Terdeteksi  │
-                        │  • Confidence Score          │
-                        │  • Laporan Misi              │
-                        └─────────────────────────────┘
-```
+<div align="center">
+  <img src="assets/ArsitekturLv1.png" alt="System Architecture" width="100%"/>
+</div>
 
 ### Alur Kerja Sistem
 
-1. **Perencanaan Misi** — Operator menentukan rute penerbangan dan area target
-2. **Penerbangan Drone** — Drone mengikuti rute yang telah diprogram
-3. **Akuisisi Data** — Kamera mengambil frame secara real-time dari udara
-4. **Preprocessing** — Frame diproses (invert warna, normalisasi, konversi Numpy)
-5. **Inferensi AI** — Model YOLO mendeteksi objek sampah pada setiap frame
-6. **Fusi Data** — Koordinat GPS dipadukan dengan hasil deteksi
-7. **Transmisi** — Data dikirim ke backend untuk disimpan dan divisualisasikan
-8. **Pelaporan** — Laporan misi lengkap dihasilkan otomatis
-
+1. Drone dan modul edge device dinyalakan  
+2. Drone terbang ke area pemantauan
+3. Pengguna mengakses modul perangkat edge secara wireless
+4. Pengguna menjalankan program deteksi sampah
+5. Kamera menangkap video dari area pengamatan
+6. Unit pemrosesan melakukan deteksi (inferensi) menggunakan model AI
+7. Sistem membuat data log berdasarkan hasil pemrosesan
+8. Data log dikirim ke situs pengguna 
 ---
 
-## 🛠️ Tech Stack
+## 🛠️ Kebutuhan Sistem
 
-### Hardware
+### Perangkat Keras
 
 | Komponen | Spesifikasi |
 |---|---|
-| **Frame Drone** | Holybro X500 V2 |
-| **Flight Controller** | Pixhawk 6X |
-| **Onboard Computer** | Raspberry Pi 5 |
-| **AI Accelerator** | *(Haiku AI Accelerator / sesuaikan)* |
-| **Transmitter** | RadioMaster TX16S |
-| **Kamera** | *(Sesuaikan dengan spesifikasi kamera yang dipakai)* |
+| **Drone** | Set Drone Holybro X500 V2 |
+| **Single Board Computer** | Raspberry Pi 5 16 GB |
+| **Cooler** | Raspberry Pi Active Cooler |
+| **AI Accelerator** | Raspberry Pi AI HAT+ 26 TOPS |
+| **Casing** | 52Pi Raspberry Pi 5 Metal Case |
+| **Kamera** | Raspberry Pi Camera Module 3 |
+| **Kabel Kamera** | FPC 22-Way to 15-Way for Camera - 50cm |
+| **Power Supply** | UNEED Mini Powerbank 10.000mAh 22.5W – CompactBox N10 UPB247 |
+| **Kamera** | Raspberry Pi Camera Module 3 |
+| **Modem** | Modem USB 4G LTE |
+| **Serial Converter** | FT232 FTDI USB to TTL |
+
 
 ### Software & Library
 
 | Kategori | Teknologi |
 |---|---|
 | **Bahasa Pemrograman** | Python 3.10+ |
-| **Model Deteksi** | YOLO (YOLOv8 / versi sesuai implementasi) |
+| **Model Deteksi** | YOLO (YOLOv8 saat ini) |
 | **Computer Vision** | OpenCV |
 | **Numerik** | NumPy |
 | **Flight Control** | MAVLink / DroneKit *(sesuaikan)* |
@@ -146,15 +112,68 @@ Penumpukan sampah di area terbuka dan perairan — khususnya sungai-sungai besar
 
 ---
 
-## ✨ Fitur Utama
+## 🎮 Cara Penggunaan (Sudah pernah setup atau seluruh perangkat keras dan perangkat lunak sudah siap)
 
-- **🤖 Real-Time Waste Detection** — Inferensi model YOLO langsung onboard Raspberry Pi 5 tanpa memerlukan koneksi cloud
-- **📍 GPS-Tagged Detection** — Setiap deteksi sampah secara otomatis ditandai dengan koordinat GPS
-- **⚡ Preprocessing Pipeline** — Pipeline preprocessing gambar dengan invert warna dan normalisasi untuk meningkatkan akurasi di kondisi pencahayaan beragam
-- **📡 Data Transmission** — Hasil deteksi dikirim langsung ke backend secara real-time
-- **🗺️ Waste Mapping** — Peta persebaran sampah yang dihasilkan dari setiap misi penerbangan
-- **📊 Mission Report** — Laporan otomatis mencakup jumlah deteksi, koordinat, confidence score, dan cakupan area
-- **🎯 Confidence Scoring** — Setiap deteksi disertai persentase kepercayaan model
+> [!NOTE]
+> Pastikan edge device sudah menyala dan memiliki akses internet dengan indikator modem yang aktif sebelum menjalankan perintah berikut.
+
+> [!NOTE]
+> Berikut cara mengetahui [`raspberry pi username`](#cek-username) dan [`<raspberry pi tailscale-ip>`](#cek-ip-tailscale).
+
+### Menghubungkan ke SSH Edge Device
+Akses edge device secara remote via SSH melalui CMD pada PC pengguna. 
+```bash
+ssh <raspberry pi username>@<raspberry pi tailscale-ip>
+```
+
+<details>
+<summary>✅ Output yang diharapkan</summary>
+
+```
+100.x.x.x   raspberrypi   tagged-devices   active; relay "sin"
+```
+</details>
+
+<details>
+<summary>✅ Cara memeriksa `username raspberry pi` </summary> 
+
+```
+100.x.x.x   raspberrypi   tagged-devices   active; relay "sin"
+```
+</details>
+
+
+### Menjalankan Sistem Deteksi
+
+```bash
+# Jalankan sistem deteksi utama
+python src/main.py
+
+# Dengan mode verbose (tampilkan bounding box di layar)
+python src/main.py --display
+
+# Deteksi dari file video (untuk testing)
+python src/main.py --source path/to/video.mp4
+```
+
+### Menjalankan Backend
+
+```bash
+# Jalankan backend server
+python backend/app.py
+
+# Server akan berjalan di http://localhost:5000
+```
+
+### Testing Model
+
+```bash
+# Test inferensi pada gambar statis
+python src/detect.py --image path/to/image.jpg --model models/trash_detection.pt
+
+# Evaluasi performa model pada dataset test
+python src/evaluate.py --dataset data/test/
+```
 
 ---
 
@@ -222,42 +241,6 @@ backend:
 
 ---
 
-## 🎮 Cara Penggunaan
-
-### Menjalankan Sistem Deteksi
-
-```bash
-# Jalankan sistem deteksi utama
-python src/main.py
-
-# Dengan mode verbose (tampilkan bounding box di layar)
-python src/main.py --display
-
-# Deteksi dari file video (untuk testing)
-python src/main.py --source path/to/video.mp4
-```
-
-### Menjalankan Backend
-
-```bash
-# Jalankan backend server
-python backend/app.py
-
-# Server akan berjalan di http://localhost:5000
-```
-
-### Testing Model
-
-```bash
-# Test inferensi pada gambar statis
-python src/detect.py --image path/to/image.jpg --model models/trash_detection.pt
-
-# Evaluasi performa model pada dataset test
-python src/evaluate.py --dataset data/test/
-```
-
----
-
 ## 📈 Hasil & Evaluasi
 
 Model deteksi sampah dievaluasi menggunakan metrik standar computer vision:
@@ -318,21 +301,16 @@ Proyek ini dilisensikan di bawah [MIT License](LICENSE).
 
 ---
 
-## 🤝 Kontribusi
+## 🤝 Kontributor
 
-Proyek ini merupakan bagian dari Tugas Akhir. Saran dan masukan tetap diterima melalui [Issues](https://github.com/[username]/trash-vision/issues).
+**Kelompok** : TA25260127
+**Anggota** :
+1. Naufal Afiq Muzaffar (13222025)  
+2. Olivia Alexandra Silalahi (13222082)
+   
+**Pembimbing** :
+1. Anggera Bayuwindra, S.T., M.T., Ph.D. 
+2. Nana Sutisna, S.T., M.T., Ph.D.
+3. Ishak Hilton Pujantoro Tnunay, Ph.D. 
 
 ---
-
-## 📞 Kontak
-
-**Penulis**: [Nama Lengkap Anda]  
-**Email**: [email@domain.com]  
-**Institusi**: [Nama Universitas / Program Studi]  
-**Tahun**: 2025
-
----
-
-<div align="center">
-  <sub>Dibuat dengan ❤️ untuk lingkungan yang lebih bersih · Trash Vision © 2025</sub>
-</div>
